@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Social Media</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .profile {
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .posts {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .post {
+      background: #fff;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .post h4 {
+      margin: 0 0 10px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .like-btn {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .like-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .comment-box {
+      margin-top: 10px;
+    }
+
+    .comment-box input {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .comments {
+      margin-top: 10px;
+    }
+
+    .comment {
+      font-size: 14px;
+      background-color: #f0f0f0;
+      padding: 6px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>MySocial</h1>
+    <p>Welcome, <strong>@johndoe</strong></p>
+  </header>
+
+  <div class="profile">
+    <h2>@johndoe</h2>
+    <p>Bio: I love coding and coffee ☕</p>
+    <p>Followers: 120 | Following: 80</p>
+  </div>
+
+  <div class="posts" id="posts"></div>
+
+  <script>
+    const posts = [
+      {
+        id: 1,
+        user: "@johndoe",
+        content: "Just finished building my first JavaScript project! 🎉",
+        likes: 5,
+        comments: []
+      },
+      {
+        id: 2,
+        user: "@janedoe",
+        content: "Check out this amazing sunset I saw today 🌇",
+        likes: 8,
+        comments: []
+      }
+    ];
+
+    const postsContainer = document.getElementById('posts');
+
+    function renderPosts() {
+      postsContainer.innerHTML = '';
+      posts.forEach(post => {
+        const postDiv = document.createElement('div');
+        postDiv.classList.add('post');
+        postDiv.innerHTML = `
+          <h4>${post.user}</h4>
+          <p>${post.content}</p>
+          <div class="actions">
+            <button class="like-btn" onclick="likePost(${post.id})">❤️ Like (${post.likes})</button>
+          </div>
+          <div class="comment-box">
+            <input type="text" placeholder="Write a comment..." onkeypress="handleComment(event, ${post.id})">
+          </div>
+          <div class="comments" id="comments-${post.id}"></div>
+        `;
+        postsContainer.appendChild(postDiv);
+        updateComments(post.id);
+      });
+    }
+
+    function likePost(postId) {
+      const post = posts.find(p => p.id === postId);
+      post.likes++;
+      renderPosts();
+    }
+
+    function handleComment(e, postId) {
+      if (e.key === 'Enter' && e.target.value.trim() !== '') {
+        const commentText = e.target.value.trim();
+        const post = posts.find(p => p.id === postId);
+        post.comments.push(commentText);
+        e.target.value = '';
+        updateComments(postId);
+      }
+    }
+
+    function updateComments(postId) {
+      const commentSection = document.getElementById(`comments-${postId}`);
+      const post = posts.find(p => p.id === postId);
+      commentSection.innerHTML = '';
+      post.comments.forEach(comment => {
+        const div = document.createElement('div');
+        div.classList.add('comment');
+        div.textContent = comment;
+        commentSection.appendChild(div);
+      });
+    }
+
+    renderPosts();
+  </script>
+
+</body>
+</html>
