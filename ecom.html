@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple E-Commerce Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .products, .cart {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    .product {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #fff;
+    }
+
+    .product h3 {
+      margin-top: 0;
+    }
+
+    .product button {
+      padding: 8px 12px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .product button:hover {
+      background-color: #218838;
+    }
+
+    .cart-items {
+      margin-top: 30px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+    }
+
+    .cart-items div {
+      margin-bottom: 10px;
+    }
+
+    #total {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple E-Commerce Store</h1>
+
+  <div class="products" id="product-list"></div>
+
+  <div class="cart">
+    <h2>Your Cart</h2>
+    <div class="cart-items" id="cart-items"></div>
+    <p id="total">Total: $0.00</p>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: 'T-shirt', price: 19.99 },
+      { id: 2, name: 'Jeans', price: 49.99 },
+      { id: 3, name: 'Sneakers', price: 89.99 },
+      { id: 4, name: 'Backpack', price: 39.99 }
+    ];
+
+    let cart = [];
+
+    const productList = document.getElementById('product-list');
+    const cartItems = document.getElementById('cart-items');
+    const totalDisplay = document.getElementById('total');
+
+    function displayProducts() {
+      products.forEach(product => {
+        const div = document.createElement('div');
+        div.classList.add('product');
+        div.innerHTML = `
+          <h3>${product.name}</h3>
+          <p>Price: $${product.price.toFixed(2)}</p>
+          <button onclick="addToCart(${product.id})">Add to Cart</button>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      cart.push(product);
+      updateCart();
+    }
+
+    function updateCart() {
+      cartItems.innerHTML = '';
+      let total = 0;
+
+      cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+        cartItems.appendChild(itemDiv);
+        total += item.price;
+      });
+
+      totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    displayProducts();
+  </script>
+</body>
+</html>
